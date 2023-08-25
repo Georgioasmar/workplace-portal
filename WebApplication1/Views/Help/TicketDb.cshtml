@@ -1,0 +1,111 @@
+﻿@model List<Business.Models.Ticket>
+
+@{
+    ViewData["Title"] = "Tickets";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<head>
+    <style>
+        tbody tr:hover {
+            background-color: #d3d3d3 !important;
+        }
+    </style>
+
+</head>
+
+<div class="container">
+    <div class="row mb-3">
+        <div class="col-md-3">
+            <!-- Back button to go back to the menu -->
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+            <a href="@Url.Action("Index", "Help")" class="btn btn-secondary">Back</a>
+        </div>
+        <div class="col-md-6 text-center">
+            <!-- Search form centered -->
+            <form asp-action="TicketDb" method="get" class="mb-0">
+                <div class="input-group">
+                    <input type="text" class="form-control" name="searchTerm" placeholder="Search by Ticket #ID">
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" type="submit">Search</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-3 text-right">
+            <!-- Register a New Employee button -->
+            <a href="@Url.Action("TicketCrea", "Help")" class="btn btn-success">Create a New Ticket</a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="page-header"> All Tickets</h1>
+
+
+            @*:not(:first-child) to exclude first line*@
+
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Priority</th>
+                        <th>#Ticket</th>
+                        <th>Title</th>
+                        <th>Type</th>
+                        <th>Issue</th>
+                        <th>Sender ID</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+
+
+                <tbody>
+
+                    @foreach (var ticket in Model.OrderByDescending(t => t.Priority))
+                    {
+                        <tr data-id="@ticket.Id" class="clickable-row">
+                            <td>
+                                @{
+                                    string priorityText = "";
+                                    switch (@ticket.Priority)
+                                    {
+                                        case 1:
+                                            priorityText = "Low";
+                                            break;
+                                        case 2:
+                                            priorityText = "Medium";
+                                            break;
+                                        case 3:
+                                            priorityText = "High";
+                                            break;
+                                        default:
+                                            priorityText = "Unknown"; // Optional: Provide a default value
+                                            break;
+                                    }
+                                }
+                                @priorityText
+                            </td>
+                            <td href="@Url.Action("TicketReview", "Help", new { id = ticket.Id })">#@ticket.Id</td>
+                            <td>@ticket.Title</td>
+                            <td>@ticket.Type</td>
+                            <td>@ticket.Issue</td>
+                            <td>@ticket.senderID</td>
+                            <td>@ticket.Status</td>
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+
+            <script>
+                        $(document).ready(function () {
+                            $(".clickable-row").click(function () {
+                                var ticketId = $(this).data("id");
+                                window.location.href = "@Url.Action("TicketReview", "Help")/" + ticketId;
+                            });
+                        });
+            </script>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,562 @@
+﻿@model Business.Models.Employee
+
+@{
+    ViewData["Title"] = "Create Employee";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-left">
+                <a href="@Url.Action("EmpDb", "Db")" class="btn btn-secondary">Back</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h1 class="page-header">Register a New Employee</h1>
+                <hr style="width: 80%;">
+            </div>
+        </div>
+        @using (Html.BeginForm("Post", "Db", FormMethod.Post))
+        {
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="employee-details">
+                        <h2>Employee Details</h2>
+                        <div class="form-group">
+                            <label for="ID">ID</label>
+                            <select class="form-control form-control-sm" id="ID" name="ID" asp-for="Id" required>
+                                <option value="" disabled selected hidden>Select an ID</option>
+                                <option value=-1>Generate New ID</option> <!-- Add this line for the null option -->
+                                @foreach (var option in ViewData["idOptions"] as List<int>)
+                                {
+                                    <option>@option</option>
+                                }
+                            </select>
+                            <div id="generatedIdContainer" class="generated-id-container">
+                                <span class="generated-id-text">Generated ID: <span id="generatedIdValue"></span></span>
+                            </div>
+
+
+                            <style>
+                                /* Add this custom CSS rule */
+                                .generated-id-container {
+                                    position: absolute;
+                                    left: 220px;
+                                    display: none;
+                                    opacity: 0.75;
+                                    font-size: 16px;
+                                }
+                            </style>
+
+
+                        </div>
+                        <div class="form-group employee-name">
+                            <label for="Name">Employee Name</label>
+                            <input type="text" pattern="^[A-Za-z ]{1,25}$" maxlength="25" class="form-control" id="Name" name="Name" required asp-for="Name">
+                        </div>
+
+                        <style>
+                            /* Add these custom CSS rules */
+                            .employee-name {
+                                margin-top: 1.5rem; /* Adjust the value as needed */
+                            }
+                        </style>
+
+                        <div class="form-group employee-email">
+                            <label for="Email">Email</label>
+                            <input type="email" class="form-control" id="Email" name="Email" asp-for="Email">
+                        </div>
+
+
+
+                        <div class="form-group">
+                            <label for="Address">Address</label>
+                            <input type="text" pattern="[A-Za-z, ]*" maxlength="25" class="form-control" id="Address" name="Address" asp-for="Address">
+                        </div>
+                        <div class="form-group">
+                            <label for="Phone">Phone Number</label>
+                            <div class="phone-input-group">
+                                <input type="tel" pattern="[+]?[0-9]{1,3}" class="form-control country-code-input" id="countryCode" name="countryCode" placeholder="Country Code" value="+961" required asp-for="countryCode">
+                                <input type="tel" pattern="^(?:\d{2} ?\d{2} ?\d{2} ?\d{2})$" class="form-control phone-number-input" id="Phone" name="Phone" placeholder="Phone Number" required asp-for="Phone">
+                            </div>
+                        </div>
+
+                        <style>
+
+                            .phone-input-group {
+                                display: flex;
+                                align-items: center;
+                            }
+
+                            .country-code-input {
+                                width: 30%; /* Adjust the width as needed */
+                                margin-right: 10px; /* Add spacing between the inputs */
+                            }
+
+                            .phone-number-input {
+                                width: 70%; /* Adjust the width as needed */
+                            }
+                        </style>
+
+
+                    </div>
+
+                </div>
+                <div class="col-md-4">
+                    <div class="position-details">
+                        <h2>Position</h2>
+                        <div class="form-group">
+                            <label for="Dep">Department</label>
+                            <select class="form-control" id="Dep" name="Dep" required asp-for="Dep">
+                                <option value="No Department Selected" disabled selected hidden>Select a Department</option>
+                                @foreach (var option in ViewData["DepOptions"] as List<string>)
+                                {
+                                    <option value="@option">@option</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="Pos">Field</label>
+                            <select class="form-control" id="Pos" name="Pos" asp-for="Pos">
+                                <option value=-1 disabled selected hidden>Select a Department First</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="FullPos">Position</label>
+                            <select class="form-control" id="FullPos" name="FullPos" asp-for="FullPos">
+                                <option value=-1 disabled selected hidden>Select a Department First</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="account-details">
+                        <h2>Account Details</h2>
+                        <div class="form-group">
+                            <label for="User">Username</label>
+                            <input type="text" pattern="^[A-Za-z0-9_\-]*$" maxlength="25" class="form-control" id="User" name="User" required asp-for="User">
+                        </div>
+                        <div class="form-group">
+                            <label for="Pass">Password</label>
+                            <input type="password" pattern="^[^\s]+$" class="form-control" id="Pass" name="Pass" required asp-for="Pass">
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="isAdmin" name="isAdmin" asp-for="isAdmin">
+                            <label class="form-check-label" for="isAdmin">Give Admin Privileges</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="resetNext" name="resetNext" asp-for="resetNext">
+                            <label class="form-check-label" for="resetNext">Prompt Password Reset on Next Login</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <input type="submit" name="Save" value="Save" />
+                    <input type="reset" name="reset" value="Reset" />
+                    <button type="button" class="btn btn-danger btn-lg ml-2">Delete Profile</button>
+                </div>
+            </div>
+
+            <script>
+                $(document).ready(function () {
+                    // Attach event listener to the ID dropdown
+                    $('#ID').on('change', function () {
+                        var selectedID = $(this).val(); // Get the selected ID from the dropdown
+                        if (selectedID == -1) {
+                            //$('#').text('Hello world');
+                        } else {
+                            fetchEmployeeInfo(selectedID); // Fetch and populate employee info
+                        }
+
+                    });
+                });
+
+                async function fetchEmployeeInfo(selectedID) {
+                    try {
+                        const data = await $.ajax({
+                            url: '@Url.Action("GetEmployeeInfoById", "Db")',
+                            type: 'GET',
+                            data: { id: selectedID }
+                        });
+                        console.log(data);
+                        // Populate the textboxes with the fetched employee info
+                        $('#Name').val(data.name);
+                        $('#Email').val(data.email);
+                        $('#Address').val(data.address);
+                        $('#coutryCode').val(data.CountryCode);
+                        $('#Phone').val(data.phone);
+                        $('#Dep').val(data.dep);
+
+
+                        $('#Pos').append($('<option>', {
+                            value: data.pos,
+                            text: data.pos,
+                            disabled: true,
+                            selected: true,
+                            hidden: true
+                        }));
+
+                        loadFieldOptions(data.dep);
+                        // Load Department options and populate Field dropdown
+                        
+                        
+                        $('#Pos').val(data.field);
+                        //$('#Pos option[value="' + data.field + '"]').prop('selected', true);
+
+                        $('#Position').append($('<option>', {
+                            value: data.fullpos,
+                            text: data.fullPos,
+                            //disabled: true,
+                            selected: true,
+                            hidden: true
+                        }));
+
+                        loadFullPosOptions(data.field);
+                        //Load Field options and populate Position dropdown
+                        
+                        
+                        $('#FullPos').val(data.fullPos);
+                        //$('#FullPos option[value="' + data.fullPos + '"]').prop('selected', true);
+
+                        // Populate other fields
+                        $('#User').val(data.user);
+                        $('#Pass').val(data.pass);
+                        //$('#isAdmin').val(data.isAdmin);
+                        //$('#resetNext').val(data.resetNext);
+
+                        $('#isAdmin').prop('checked', data.isAdmin);     //special keyword for checkboxes
+                        $('#resetNext').prop('checked', data.resetNext);
+
+
+                    } catch (error) {
+                        console.log("Error fetching employee info: " + error);
+                    }
+                }
+
+            </script>
+            <script>
+                $(document).ready(function () {
+                    // Attach event listener to the department dropdown
+                    $('#Dep').change(function () {
+                        var selectedDepartment = $(this).val();
+                        loadFieldOptions(selectedDepartment);
+                        $('#FullPos').empty();
+                        $('#FullPos').append($('<option>', {
+                            value: 'select',
+                            text: 'Select a Field First'
+                        }));
+                    });
+                });
+
+                function loadFieldOptions(selectedDepartment) {
+                    $.ajax({
+                        type: 'GET', // Use 'POST' if your controller action requires POST method
+                        url: '@Url.Action("GetFieldOptions", "Db")', // Replace with your controller and action names
+                        data: { department: selectedDepartment },
+                        success: function (data) {
+                            populateFieldDropdown(data);
+                        },
+                        error: function (error) {
+                            console.log("Error loading field options: " + error);
+                        }
+                    });
+                }
+
+                function populateFieldDropdown(fieldOptions) {
+                    // Clear existing options in the "Field" dropdown
+                    $('#Pos').empty();
+                    $('#Pos').append($('<option>', {
+                        value: 'select',
+                        text: 'Select a Field',
+                        disabled: true,
+                        selected: true,
+                        hidden: true
+                    }));
+
+                    // Populate the "Field" dropdown with options
+                    fieldOptions.forEach(function (option) {
+                        $('#Pos').append($('<option>', {
+                            value: option,
+                            text: option
+                        }));
+                    });
+                }
+
+            </script>
+
+
+
+
+
+            <script>
+
+
+                $(document).ready(function () {
+
+                    // Attach event listener to the department dropdown
+                    $('#Pos').change(function () {
+                        var selectedField = $(this).val();
+                        loadFullPosOptions(selectedField);
+                    });
+                });
+
+
+
+                //VALIDITY AND AVAILABILITY CHECK
+
+
+                document.addEventListener('click', function (event) {
+                    const clickedElement = event.target;
+                    const emailTextbox = document.getElementById('Email');
+                    const phoneTextbox = document.getElementById('Phone'); // Adapt this to your actual Phone textbox ID
+                    const userTextbox = document.getElementById('User');
+                    const userIdDropdown = document.getElementById('ID');
+                    const userId = userIdDropdown.value;
+                    console.log(userIdDropdown.value);
+
+                    if (emailTextbox.value !== '' && clickedElement !== emailTextbox && !emailTextbox.contains(clickedElement)) {
+                        console.log("click verified for email")
+                        if (/^\w+([\._-]?\w+)*@@\w+([\._-]?\w+)*(\.\w{2,3})+$/.test(emailTextbox.value)) {
+                            console.log(emailTextbox.value + " HAS PASSED THE PATTERN CHECK")
+                            //emailTextbox.setCustomValidity(""); // Clear any previous validation message
+
+                            const userIdDropdown = document.getElementById('ID');
+                            const userId = userIdDropdown.value;
+                            checkEmailAvailability(emailTextbox.value, userId);
+                        } else {
+                            console.log("Email pattern is invalid");
+                            emailTextbox.setCustomValidity("This email address is invalid.");
+                        }
+                    } else {
+                        console.log("Textbox is empty or clicked inside");
+                        emailTextbox.setCustomValidity(""); // Clear any previous validation message
+                    }
+
+                    if (phoneTextbox.value !== '' && clickedElement !== phoneTextbox && !phoneTextbox.contains(clickedElement)) {
+                        const phoneNumber = phoneTextbox.value;
+                        checkPhoneNumberAvailability(phoneNumber, userId);
+                    }
+
+                    if (userTextbox.value !== '' && clickedElement !== userTextbox && !userTextbox.contains(clickedElement)) {
+                        const user = userTextbox.value;
+                        checkUserAvailability(user, userId);
+                    }
+
+                });
+
+                function checkEmailAvailability(email, userId) {
+                    const url = '/Db/EmailCheck'; // Adjust the URL to your controller and action
+                    const params = { email: email, userId: userId };
+
+                    fetch(url + '?' + new URLSearchParams(params))
+                        .then(response => response.json())
+                        .then(data => {
+                            const emailTextbox = document.getElementById('Email'); // Adapt this to your actual Email textbox ID
+                            console.log(data);
+                            if (data.exists) {
+                                emailTextbox.setCustomValidity('This Email Address is already registered.');
+                                console.log(email + " did not pass the Availability check (true, already used");
+                            } else {
+                                console.log(email + " Has passed the Availability check (false, is availabe");
+                                emailTextbox.setCustomValidity('');
+                            }
+                            console.log(emailTextbox.checkValidity());
+                        })
+                        .catch(error => {
+                            console.error('Error checking email address:', error);
+                        });
+                }
+
+
+                //document.addEventListener('click', function (event) {
+
+                //    const clickedElement = event.target;
+                //    const emailTextbox = document.getElementById('Email');
+
+                //    if (emailTextbox.value !== '' && clickedElement !== emailTextbox && !emailTextbox.contains(clickedElement)) {
+                //        if (/^\w+([\._-]?\w+)*@@\w+([\._-]?\w+)*(\.\w{2,3})+$/.test(emailTextbox.value)) {
+                //            console.log("both ifs true");
+                //            emailTextbox.setCustomValidity(""); //set to valid
+                //        } else {
+                //            //emailTextbox.value = "";
+                //            emailTextbox.setCustomValidity("This email address is invalid."); //set to not valid
+                //            //emailTextbox.reportValidity(); // This will trigger the browser to show the custom validation message
+
+                //            //alert("You have entered an invalid email address!");
+
+                //        }
+                //    } else {
+                //        console.log("first if false"); // Clear the result if clicked inside the textbox or if the textbox is empty
+                //    }
+
+                //});
+
+
+                function loadFullPosOptions(selectedField) {
+                    $.ajax({
+                        type: 'GET', // Use 'POST' if your controller action requires POST method
+                        url: '@Url.Action("GetFullPosOptions", "Db")', // Replace with your controller and action names
+                        data: { field: selectedField },
+                        success: function (data) {
+                            populateFullPosDropdown(data);
+                        },
+                        error: function (error) {
+                            console.log("Error loading FullPos options: " + error);
+                        }
+                    });
+                }
+
+                function populateFullPosDropdown(fullPosOptions) {
+                    // Clear existing options in the "Field" dropdown
+                    $('#FullPos').empty();
+                    $('#FullPos').append($('<option>', {
+                        value: 'select',
+                        text: 'Select a Position',
+                        disabled: true,
+                        selected: true,
+                        hidden: true
+                    }));
+                    // Populate the "Field" dropdown with options
+                    fullPosOptions.forEach(function (option) {
+                        $('#FullPos').append($('<option>', {
+                            value: option,
+                            text: option
+                        }));
+                    });
+                }
+
+            </script>
+
+            <script>
+
+                $(document).ready(function () {
+                    generateNewID(); // Generate the ID when the page loads
+                    $('#ID').on('change', function () {
+                        var selectedID = $(this).val();
+                        if (selectedID == -1) {
+                            $('#generatedIdContainer').show(); // Show the container for the generated ID
+                        } else {
+                            $('#generatedIdContainer').hide(); // Hide the container when a different option is selected
+                            fetchEmployeeInfo(selectedID);
+                        }
+                    });
+                });
+
+                function generateNewID() {
+                    var lastOption = $('#ID option:last-child');
+                    var lastID = parseInt(lastOption.val());
+                    if (!isNaN(lastID)) {
+                        var newID = lastID + 1;
+                        $('#generatedIdValue').text(newID); // Set the generated ID value
+                    } else {
+                        $('#generatedIdValue').text('Unable to generate ID.');
+                    }
+                }
+
+                function checkPhoneNumberAvailability(phoneNumber, userId) {
+                    const url = '/Db/PhoneCheck'; // Adjust the URL to your controller and action
+                    const params = { phoneNumber: phoneNumber, userId: userId }; // Pass the user ID along
+
+                    fetch(url + '?' + new URLSearchParams(params))
+                        .then(response => response.json())
+                        .then(data => {
+                            const phoneTextbox = document.getElementById('Phone'); // Adapt this to your actual Phone textbox ID
+
+                            if (data.exists) {
+                                phoneTextbox.setCustomValidity('This Phone Number is already registered.');
+                            } else {
+                                phoneTextbox.setCustomValidity('');
+                            }
+                            console.log(data);
+                        })
+                        .catch(error => {
+                            console.error('Error checking phone number:', error);
+                        });
+                }
+
+                function checkUserAvailability(user, userId) {
+                    const url = '/Db/UsernameCheck'; // Adjust the URL to your controller and action
+                    const params = { user: user, userId: userId }; // Pass the user ID along
+
+                    fetch(url + '?' + new URLSearchParams(params))
+                        .then(response => response.json())
+                        .then(data => {
+                            const userTextbox = document.getElementById('User'); // Adapt this to your actual Phone textbox ID
+
+                            if (data.exists) {
+                                userTextbox.setCustomValidity('This Username is already registered.');
+                            } else {
+                                userTextbox.setCustomValidity('');
+                            }
+                            console.log(data);
+                        })
+                        .catch(error => {
+                            console.error('Error checking username:', error);
+                        });
+                }
+
+            </script>
+
+
+            <script>
+                //document.addEventListener('click', function (event) {
+                //    const clickedElement = event.target;
+                //    const phoneTextbox = document.getElementById('Phone'); // Adapt this to your actual Phone textbox ID
+                //    //const emailTextbox = document.getElementById('Email');
+                //    const userIdDropdown = document.getElementById('ID');
+                //    const userId = userIdDropdown.value;
+                //    console.log(userIdDropdown.value);
+
+                //    //if (emailTextbox.value !== '' && clickedElement !== emailTextbox && !emailTextbox.contains(clickedElement)) {
+                //    //    const email = emailTextbox.value;
+                //    //    checkEmailAvailability(email, userId);
+                //    //}
+
+                //    if (phoneTextbox.value !== '' && clickedElement !== phoneTextbox && !phoneTextbox.contains(clickedElement)) {
+                //        const phoneNumber = phoneTextbox.value;
+                //        checkPhoneNumberAvailability(phoneNumber, userId);
+                //    }
+
+                    
+
+                //});
+
+                //function checkEmailAvailability(email, userId) {
+                //    const url = '/Db/EmailCheck'; // Adjust the URL to your controller and action
+                //    const params = { email: email, userId: userId }; // Pass the user ID along
+
+                //    fetch(url + '?' + new URLSearchParams(params))
+                //        .then(response => response.json())
+                //        .then(data => {
+                //            const emailTextbox = document.getElementById('Email'); // Adapt this to your actual Phone textbox ID
+                //            console.log(data);
+                //            if (data.exists) {
+                //                emailTextbox.setCustomValidity('This Email Address is already registered.');
+                //            } else {
+                //                emailTextbox.setCustomValidity('');
+                //            }
+                //            console.log(emailTextbox.checkValidity());
+                //        })
+                //        .catch(error => {
+                //            console.error('Error checking email address:', error);
+                //        });
+                //}
+
+                          
+
+            </script>
+
+
+        }
+
+
+    </div>
+
+</body>

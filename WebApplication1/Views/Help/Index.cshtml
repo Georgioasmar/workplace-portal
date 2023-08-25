@@ -1,0 +1,62 @@
+﻿@using Business.Controllers
+@using Business.Models
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Help Desk</title>
+    <style>
+        /* Reset default margins and paddings */
+        body, h1, h2, h3, p {
+            margin: 0;
+            padding: 0;
+        }
+        /* Your custom styling for the top bar */
+        .top-bar {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+        }
+        /* Main content styling */
+        .content {
+            margin: 20px;
+        }
+        /* Button styling */
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+            .btn:hover {
+                background-color: #0056b3;
+            }
+    </style>
+</head>
+<body>
+
+    <div class="top-bar">
+        <a href="@Url.Action("Index", "Menu")" class="btn btn-secondary">Back</a>
+        <h1>Help Desk</h1>
+        <a href="@Url.Action("MyTickets", "Help")" class="btn">My Tickets</a>
+        @if (ViewBag.UserIsAdmin)
+        {
+            <a href="@Url.Action("TicketDb", "Help")" class="btn">All Tickets</a>
+        }
+        @*<script>console.log("viewbagadmin = " + ViewBag.UserIsAdmin)</script>*@
+        <a href="@Url.Action("TicketCrea", "Help")" class="btn">New Ticket</a>
+        <a href="@Url.Action("FAQ", "Help")" class="btn">FAQ</a>
+    </div>
+
+    <div class="content">
+        <!-- Your main content here -->
+    </div>
+</body>
+</html>

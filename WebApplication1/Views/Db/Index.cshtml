@@ -1,0 +1,21 @@
+﻿@{
+    ViewData["Title"] = "HR Portal";
+    Layout = "~/Views/Shared/_Layout.cshtml"; // Use your desired layout
+}
+
+<a href="@Url.Action("Index", "Menu")" class="btn btn-secondary">Back</a>
+
+<div class="container text-center mt-5">
+    <h1>Select Database</h1>
+    <div class="row mt-4">
+        <div class="col-md-4" style="margin-top: 20px;">
+            <a href="@Url.Action("EmpDb", "Db")" class="btn btn-primary btn-lg btn-block">Employee Database</a>
+        </div>
+        <div class="col-md-4" style="margin-top: 20px;">
+            <a href="@Url.Action("DepDb", "Db")" class="btn btn-success btn-lg btn-block">Department Database</a>
+        </div>
+        <div class="col-md-4" style="margin-top: 20px;">
+            <a href="@Url.Action("SalDb", "DB")" class="btn btn-info btn-lg btn-block">Salaries Database</a>
+        </div>
+    </div>
+</div>

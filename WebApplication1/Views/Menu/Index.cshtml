@@ -1,0 +1,63 @@
+﻿@{
+    ViewData["Title"] = "Menu";
+    Layout = "~/Views/Shared/_Layout.cshtml"; // Assuming you have a shared layout
+}
+
+<div class="container">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">My App</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="accountDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Account
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="accountDropdown">
+                        <a class="dropdown-item" href="#">Profile</a>
+                        <a class="dropdown-item" href="#">Settings</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="@Url.Action("Index", "Home")" >Logout</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="row mt-5">
+
+
+        @*<div class="col-md-4">
+                <a href="@Url.Action("Employees", "EmployeeManager")" class="btn btn-primary btn-block">Employee Manager</a>
+            </div>*@
+
+        @if ((bool)ViewBag.UserIsAdmin)
+        {
+            <div class="col-md-4">
+                <a href="@Url.Action("Index", "Db")" id="staff"class="btn btn-primary btn-block">Staff Database</a>
+            </div>
+        }
+
+        <style>
+            .col-md-4 {
+                color: #FFF;
+                text-align: center;
+                font-family: Inter;
+                font-size: 1.5rem;
+                font-style: normal;
+                font-weight: 600;
+                line-height: 1.15625rem; /* 77.083% */
+            }
+        </style>
+
+        <div class="col-md-4">
+            <a href="@Url.Action("Index", "Help")" class="btn btn-success btn-block">Help Desk</a>
+        </div>
+        <div class="col-md-4">
+            <a href="@Url.Action("Index", "Asset")" class="btn btn-info btn-block">Asset Management</a>
+        </div>
+    </div>
+
+</div>

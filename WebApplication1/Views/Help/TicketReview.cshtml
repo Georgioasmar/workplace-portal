@@ -1,0 +1,180 @@
+﻿@model Business.Models.Ticket
+
+@{
+    ViewData["Title"] = "Review Ticket #" + Model.Id;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>@ViewData["Title"]</title>
+    <style>
+        /* Add your CSS styles here */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+        }
+
+        .ticket-container {
+            display: flex;
+            margin: 20px;
+            background-color: #fff;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .ticket-info {
+            padding: 20px;
+            flex: 1;
+            border-right: 1px solid #e0e0e0;
+        }
+
+            .ticket-info h1 {
+                font-size: 24px;
+                margin-bottom: 15px;
+            }
+
+            .ticket-info p {
+                margin-bottom: 12px;
+                font-size: 16px;
+                line-height: 1.6;
+            }
+
+        .ticket-actions {
+            padding: 20px;
+            flex: 1;
+            margin-top: 20px;
+        }
+
+            .ticket-actions h3 {
+                font-size: 18px;
+                margin-bottom: 15px;
+            }
+
+        .status-toolbox {
+            /*display: flex;*/
+            flex-direction: row;
+            gap: 10px;
+            display: grid;
+            grid-template-columns: repeat(3, auto);
+            grid-gap: 10px;
+        }
+
+            .status-toolbox label {
+                display: inline-block;
+                background-color: #f9f9f9;
+                font-size: 14px;
+                padding: 5px 7.5px;
+                border: 1px solid #e0e0e0;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+
+            .status-toolbox label {
+                display: block;
+                text-align: center;
+                background-color: #f9f9f9;
+                padding: 10px 15px;
+                border: 1px solid #e0e0e0;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+
+                .status-toolbox label:hover {
+                    background-color: #e0e0e0;
+                }
+
+            .status-toolbox input[type="radio"] {
+                display: none;
+            }
+
+                .status-toolbox input[type="radio"]:checked + label {
+                    background-color: #3498db;
+                    color: white;
+                }
+
+        .ticket-actions textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            margin-top: 10px;
+            resize: vertical;
+        }
+
+        .ticket-actions button {
+            margin-top: 20px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="ticket-container">
+        <a href="@Url.Action("TicketDb", "Help")" class="btn btn-secondary" style="position: absolute; top: 10px; left: 10px;">Back</a>
+        <div class="ticket-info">
+            <h1>Review Ticket #@Model.Id</h1>
+            <p><strong>Status:</strong> @Model.Status</p>
+            <p><strong>Priority:</strong> @Model.Priority</p>
+            <p><strong>Title:</strong> @Model.Title</p>
+            <p><strong>Type:</strong> @Model.Type</p>
+            <p><strong>Issue:</strong> @Model.Issue</p>
+            <div class="description-box">
+                <strong>Description:</strong>
+                <div class="description-data">@Model.Desc</div>
+            </div>
+        </div>
+
+        @using (Html.BeginForm("ReviewTicket", "Help", FormMethod.Post))
+        {
+        <form method="post">
+
+            <div class="ticket-actions">
+                <h3>Status Options</h3>
+                <div class="status-toolbox">
+                    <input type="radio" name="Status" value="Open" id="openRadio" asp-for="Status" />
+                    <label for="openRadio">Open</label>
+                    <input type="radio" name="Status" value="Cancelled" id="cancelRadio" asp-for="Status">
+                    <label for="cancelRadio">Cancel</label>
+                    <input type="radio" name="Status" value="ongoing" id="ongoingRadio" asp-for="Status">
+                    <label for="ongoingRadio">Ongoing</label>
+                    <input type="radio" name="Status" value="Pending" id="waitingRadio" asp-for="Status">
+                    <label for="waitingRadio">Approval Pending</label>
+                    <input type="radio" name="Status" value="Closed" id="closedRadio" asp-for="Status">
+                    <label for="closedRadio">Closed</label>
+                    <input type="radio" name="Status" value="Escalated" id="escalatedRadio" asp-for="Status">
+                    <label for="escalatedRadio">Escalate</label>
+                    <input type="radio" name="Status" value="Assigned" id="assignedRadio" asp-for="Status">
+                    <label for="assignedRadio">Assign</label>
+                </div>
+
+                <h3>Statement</h3>
+                @*<textarea class="form-control" name="Statement" rows="5" placeholder="Justify your action..." value=Statement asp-for="Statement"></textarea>*@
+
+                <div class="form-group">
+                    @*<label for="description">Description</label>*@
+                    <textarea class="form-control" id="description" name="Statement" rows="5" placeholder="Justify your action..." value=@Model.Statement asp-for="Statement"></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Submit Review</button>
+
+                <div class="form-group">
+                    @*<label for="id">ID</label>*@
+                    <input type="text" class="form-control" hidden id="id" name="Id" value="@Model.Id" asp-for="Id" />
+                </div>
+
+            </div>
+
+        </form>
+            
+
+        }
+
+    </div>
+</body>
+</html>

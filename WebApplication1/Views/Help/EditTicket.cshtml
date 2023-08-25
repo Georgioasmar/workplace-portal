@@ -1,0 +1,140 @@
+﻿@model Business.Models.Ticket
+
+@{
+    ViewData["Title"] = "Support Ticket #" + Model.Id;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>@ViewData["Title"]</title>
+    <style>
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+        }
+
+        .status-label {
+            margin-left: 20px; /* Add some spacing between Status label and Edit Support Ticket heading */
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Edit Support Ticket #@Model.Id</h1>
+        <h2 class="status-label">Status: @Model.Status</h2>
+    </div>
+    <a class="btn btn-secondary" href="@Url.Action("MyTickets", "Help")" style="position: absolute; top: 0; left: 0; margin: 10px;">Back</a>
+    @using (Html.BeginForm("EditTicketPost", "Help", FormMethod.Post))
+    {
+        <form method="post">
+            <div class="form-group">
+                <label for="problemType">Problem Type</label>
+                <select class="form-control" id="Type" name="Type" value=@Model.Type required asp-for="Type">
+                    <option value=-1 disabled selected hidden>Select Problem Type</option>
+                    <option value="Hardware">Hardware</option>
+                    <option value="Operating System (OS)">Operating System (OS)</option>
+                    <option value="Software">Software</option>
+                    <option value="Network">Network</option>
+                </select>
+            </div>
+
+            <script>
+                $(document).ready(function () {
+                        loadIssueOptions('@Model.Type');
+                        console.log('@Html.Raw(Model.Issue)');
+
+                });
+            </script>
+
+            <div class="form-group">
+                <label for="Issue">Issue</label>
+                <select class="form-control" id="Issue" name="Issue" value=@Model.Issue asp-for="Issue">
+                    <option value=-1 disabled selected hidden>Select Problem Type First</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="priority">Priority</label>
+                <select class="form-control" id="priority" name="Priority" value=@Model.Priority asp-for="Priority">
+                    <option value="1">Low</option>
+                    <option value="2">Medium</option>
+                    <option value="3">High</option>
+                    Add more options as needed
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="title">Title</label>
+                <input type="text" class="form-control" id="title" name="Title" value=@Model.Title required asp-for="Title">
+            </div>
+
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea class="form-control" id="description" name="Desc" rows="4" value=@Model.Desc asp-for="Desc"></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+
+            <div class="form-group">
+                @*<label for="id">ID</label>*@
+                <input type="text" class="form-control" hidden id="id" name="Id" value="@Model.Id" asp-for="Id" />
+            </div>
+
+
+            <script>
+
+                $(document).ready(function () {
+                    $('#Type').change(function () {
+                        var selectedType = $(this).val();
+                        loadIssueOptions(selectedType);
+                        console.log("Dropdown event");
+                    });
+                });
+
+                function loadIssueOptions(selectedType) {
+                    $.ajax({
+                        type: 'GET', // Use 'POST' if your controller action requires POST method
+                        url: '@Url.Action("GetIssueOptions", "Help")', // Replace with your controller and action names
+                        data: { Type: selectedType },
+                        success: function (data) {
+                            console.log("Received data:", data);
+                            populateIssueDropdown(data);
+                            console.log("AJAX SUCCESFUL");
+                        },
+                        error: function (error) {
+                            console.log("Error loading Issue options: " + error);
+                        }
+                    });
+                }
+
+                function populateIssueDropdown(IssueOptions) {
+                    // Clear existing options in the "Field" dropdown
+                    $('#Issue').empty();
+                    $('#Issue').append($('<option>', {
+                        value: 'select',
+                        text: 'Select an Issue',
+                        disableda: true,
+                        selected: true,
+                        hidden: true
+                    }));
+
+                    console.log("populate called");
+                    // Populate the "Field" dropdown with options
+                    IssueOptions.forEach(function (option) {
+                        $('#Issue').append($('<option>', {
+                            value: option,
+                            text: option
+                        }));
+                    });
+                }
+            </script>
+        </form>
+    }
+</body>
+</html>
