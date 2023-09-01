@@ -1,0 +1,118 @@
+﻿@{
+    ViewData["Title"] = "Create Employee";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<@*head>
+    <script>
+        function refreshDepartments(existingDepartments) {
+            var departmentSelect = document.getElementById('Department');
+            for (var i = 0; i < existingDepartments.length; i++) {
+                var depName = existingDepartments[i];
+                if (!departmentSelect.querySelector(`option[value='${depName}']`)) {
+                    var option = document.createElement("option");
+                    option.text = depName;
+                    option.value = depName;
+                    departmentSelect.appendChild(option);
+                }
+            }
+        }
+    </script>
+</head>*@
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <h1 class="page-header">Register a New Employee</h1>
+            <hr style="width: 80%;">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="employee-details">
+                <h2>Employee Details</h2>
+                <div class="form-group">
+                    <label for="ID">ID</label>
+                    <select class="form-control form-control-sm" id="ID" name="ID">
+                         Options for ID, e.g., 0001, 0002, ... 
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="Name">Employee Name</label>
+                    <input type="text" class="form-control" id="Name" name="Name" required>
+                </div>
+                <div class="form-group">
+                    <label for="Email">Email</label>
+                    <input type="email" class="form-control" id="Email" name="Email">
+                </div>
+                <div class="form-group">
+                    <label for="Address">Address</label>
+                    <input type="text" class="form-control" id="Address" name="Address">
+                </div>
+                <div class="form-group">
+                    <label for="PhoneNumber">Phone Number</label>
+                    <input type="tel" class="form-control" id="PhoneNumber" name="PhoneNumber">
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="position-details">
+                <h2>Position</h2>
+                <div class="form-group">
+                    <label for="Department">Department</label>
+                    <select class="form-control" id="Department" name="Department">
+                         Options for departments 
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="Field">Field</label>
+                    <select class="form-control" id="Field" name="Field">
+                         Options for fields 
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="Position">Position</label>
+                    <select class="form-control" id="Position" name="Position">
+                         Options for positions 
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="account-details">
+                <h2>Account Details</h2>
+                <div class="form-group">
+                    <label for="Username">Username</label>
+                    <input type="text" class="form-control" id="Username" name="Username" required>
+                </div>
+                <div class="form-group">
+                    <label for="Password">Password</label>
+                    <input type="password" class="form-control" id="Password" name="Password" required>
+                </div>
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="AdminPrivileges" name="AdminPrivileges">
+                    <label class="form-check-label" for="AdminPrivileges">Give Admin Privileges</label>
+                </div>
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="PasswordReset" name="PasswordReset">
+                    <label class="form-check-label" for="PasswordReset">Prompt Password Reset on Next Login</label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <button type="button" class="btn btn-primary btn-lg">Save Info</button>
+            <button type="button" class="btn btn-danger btn-lg ml-2">Delete Profile</button>
+        </div>
+    </div>
+    @if (ViewData["RefreshScript"] is string refreshScript)
+    {
+        @Html.Raw(refreshScript)
+    }
+
+    <script>
+            // You can remove the window.onload since the script will be executed directly
+    </script>
+</div>
+

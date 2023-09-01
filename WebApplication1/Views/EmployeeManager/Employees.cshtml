@@ -1,0 +1,58 @@
+﻿@model List<Business.Models.Employee>
+
+@{
+    ViewData["Title"] = "Employees";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row mb-3">
+        <div class="col-md-3">
+            <!-- Back button to go back to the menu -->
+            <a href="@Url.Action("toMenu", "Main")" class="btn btn-secondary">Back</a>
+        </div>
+        <div class="col-md-6 text-center">
+            <!-- Search form centered -->
+            <form asp-action="Employee" method="get" class="mb-0">
+                <div class="input-group">
+                    <input type="text" class="form-control" name="searchTerm" placeholder="Search Employee">
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" type="submit">Search</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-3 text-right">
+            <!-- Register a New Employee button -->
+            <a href="@Url.Action("toEmpCreator", "Main")" class="btn btn-success">Register a New Employee</a>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="page-header">Employee List</h1>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Employee Name</th>
+                        <th>Position</th>
+                        <th>Username</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var employee in Model)
+                    {
+                        <tr>
+                            <td>@employee.Id</td>
+                            <td>@employee.Name</td>
+                            <td>@employee.FullPos</td>
+                            <td>@employee.User</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

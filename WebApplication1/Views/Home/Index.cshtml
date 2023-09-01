@@ -1,0 +1,22 @@
+﻿@{
+        ViewData["Title"] = "Home Page";
+    }
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Please enter your login credentials.</p>
+
+    <form asp-action="Login" method="post">
+        <div class="form-group">
+            <label for="txt_User">Username:</label>
+            <input type="text" id="txt_User" name="User" class="form-control col-md-4 offset-md-4" />
+        </div>
+
+        <div class="form-group">
+            <label for="txt_Pass">Password:</label>
+            <input type="password" id="txt_Pass" name="Pass" class="form-control col-md-4 offset-md-4" />
+        </div>
+
+        <button type="submit" class="btn btn-primary">Login</button>
+    </form>
+</div>
